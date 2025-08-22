@@ -1,4 +1,4 @@
-// Constant
+// Just a normal LED Blinking
 double node_2_constant = 1;
 boolean node_6_clock_signal = 0;
 unsigned long node_6_clock_signal_previous_millis = 0; // เก็บเวลา (ms)
