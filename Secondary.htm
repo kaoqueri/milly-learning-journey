@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Courses - Cat Tutor Academy</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a friendly look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to apply the font and theme */
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .theme-bg-blue {
+            background-color: #3b82f6; /* A friendly blue */
+        }
+        .theme-text-yellow {
+            color: #facc15; /* A bright yellow */
+        }
+        .theme-bg-yellow {
+            background-color: #facc15; /* A bright yellow */
+        }
+        .theme-bg-yellow-hover:hover {
+            background-color: #eab308; /* A darker yellow for hover */
+        }
+        .card-hover-effect {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        /* Timeline styles */
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 90%;
+            height: 6px;
+            background-color: #93c5fd; /* light blue */
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-blue-50">
+
+    <!-- Header Section -->
+    <header class="theme-bg-blue text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.htm" class="flex items-center gap-3 hover:text-yellow-300 transition">
+                <!-- Cat Logo SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cat"><path d="M12 5c.67 0 1.35.09 2 .26 1.78.43 2.9 2.13 2.5 4.04-.37 1.77-2.06 3.09-3.95 3.17-1.95.08-3.59-1.25-3.8-3.22-.21-1.98 1.2-3.88 3.25-3.88.24 0 .48.02.71.05M12 5c-.67 0-1.35.09-2 .26C8.22 5.69 7.1 7.39 7.5 9.3c.37 1.77 2.06 3.09 3.95 3.17 1.95.08 3.59-1.25 3.8-3.22.21-1.98-1.2-3.88-3.25-3.88A2.94 2.94 0 0 0 12 5Z"/><path d="M3.6 11c-.4.6-.6 1.3-.6 2 0 1.7 1.3 3 3 3h12c1.7 0 3-1.3 3-3 0-.7-.2-1.4-.6-2"/><path d="M5 16.2C5 15 5.5 14 7 14h10c1.5 0 2 1 2 2.2"/><path d="M7.5 19c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5"/><path d="M13.5 19c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5"/></svg>
+                <h1 class="text-3xl font-bold">Cat Tutor Academy</h1>
+            </a>
+            <nav>
+                <a href="index.htm" class="text-lg theme-text-yellow font-semibold hover:underline inline-flex items-center gap-2">
+                    <!-- Home Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Banner Section -->
+    <section>
+        <!-- Full-width banner image -->
+        <img src="secondary_banner.jpg" alt="A happy cat studying with children" class="w-full h-auto object-cover" style="max-height: 500px;">
+    </section>
+
+    <!-- Main Content Section -->
+    <main class="container mx-auto px-6 py-12">
+        <!-- Page Title -->
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold text-blue-800">Our Courses</h2>
+            <p class="text-gray-600 mt-4 text-xl">Expert instruction from the most qualified feline faculty.</p>
+        </div>
+
+        <!-- Why Choose Our Courses Section -->
+        <div class="max-w-4xl mx-auto mb-16 bg-white p-8 rounded-2xl shadow-lg border-2 border-blue-200">
+            <h3 class="text-3xl font-bold text-blue-800 mb-8 text-center">A Curriculum Crafted for Excellence 🎓</h3>
+            
+            <!-- Visual Timeline -->
+            <div class="relative w-full py-16 timeline-container">
+                <div class="flex justify-between items-center w-full">
+                    <!-- Timeline Point 1: Primary -->
+                    <div class="relative flex-1 flex justify-center">
+                        <div class="absolute -top-16 w-32 text-center">
+                            <div class="bg-gray-200 text-gray-600 p-2 rounded-lg shadow-md">Primary</div>
+                        </div>
+                        <div class="relative z-10 w-8 h-8 bg-white border-4 border-blue-300 rounded-full"></div>
+                    </div>
+                    <!-- Timeline Point 2: Secondary (Active) -->
+                    <div class="relative flex-1 flex justify-center">
+                        <div class="absolute -bottom-20 w-36 text-center">
+                            <div class="theme-bg-yellow text-blue-800 p-3 rounded-lg shadow-xl font-bold">Secondary</div>
+                        </div>
+                        <div class="relative z-10 w-10 h-10 bg-white border-8 border-yellow-400 rounded-full transform scale-110"></div>
+                    </div>
+                    <!-- Timeline Point 3: Undergraduate -->
+                    <div class="relative flex-1 flex justify-center">
+                        <div class="absolute -top-16 w-36 text-center">
+                            <div class="bg-gray-200 text-gray-600 p-2 rounded-lg shadow-md">Undergraduate</div>
+                        </div>
+                        <div class="relative z-10 w-8 h-8 bg-white border-4 border-blue-300 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-gray-700 mb-4 text-lg text-center mt-8">
+                Our secondary school courses are designed for academic excellence. Perfect for college prep 🎯 or getting ahead, our feline faculty provides the ideal blend of rigor and encouragement.
+            </p>
+            <p class="text-gray-700 text-lg text-center">
+                With 9 lives of teaching experience 🐾, our professors simplify complex topics with patience and skill. We foster independence and critical thinking, helping students tackle problems with confidence. 🧠
+            </p>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <!-- Precalculus Card -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden card-hover-effect">
+                <img src="precalculus.jpg" alt="Illustration for Precalculus" class="w-full h-56 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-2">Precalculus</h3>
+                    <p class="text-gray-500 mb-4 italic">with Professor Bubu</p>
+                    <p class="text-gray-700 mb-6">
+                        Chase the elusive 'x' and pounce on complex functions. Professor Bubu makes derivatives as intuitive as chasing a laser dot.
+                    </p>
+                    <a href="Precalculus.htm" class="block w-full text-center font-bold text-blue-800 theme-bg-yellow py-3 rounded-lg theme-bg-yellow-hover transition-colors">View Subject</a>
+                </div>
+            </div>
+
+            <!-- General Biology Card -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden card-hover-effect">
+                <img src="biology.jpg" alt="Illustration for General Biology" class="w-full h-56 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-2">General Biology</h3>
+                    <p class="text-gray-500 mb-4 italic">with Dr. Doodoo</p>
+                    <p class="text-gray-700 mb-6">
+                        Explore the science of strategic napping, the anatomy of a perfect pounce, and the ecosystems of the backyard.
+                    </p>
+                    <a href="General_Biology.htm" class="block w-full text-center font-bold text-blue-800 theme-bg-yellow py-3 rounded-lg theme-bg-yellow-hover transition-colors">View Subject</a>
+                </div>
+            </div>
+
+            <!-- General Chemistry Card -->
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden card-hover-effect">
+                <img src="chemistry.jpg" alt="Illustration for General Chemistry" class="w-full h-56 object-cover">
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-blue-800 mb-2">General Chemistry</h3>
+                    <p class="text-gray-500 mb-4 italic">with Professor Dobby</p>
+                    <p class="text-gray-700 mb-6">
+                        Investigate the volatile reactions of catnip, the properties of H₂O in a bowl, and the atomic structure of a feather toy.
+                    </p>
+                    <a href="General_Chemistry.htm" class="block w-full text-center font-bold text-blue-800 theme-bg-yellow py-3 rounded-lg theme-bg-yellow-hover transition-colors">View Subject</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="theme-bg-blue mt-12">
+        <div class="container mx-auto px-6 py-4 text-center text-yellow-200">
+            <p>&copy; 2024 Cat Tutor Academy. All Rights Reserved. Humans taught, cats revered.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
