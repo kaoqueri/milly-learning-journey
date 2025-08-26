@@ -1,2 +1,4 @@
 # 2025-CatTutor_Web
 For working on the SCIN301 Project of Cat Tutor Academy
+
+To access the website: https://nlight.x10.mx/scin25/g1/index.htm
