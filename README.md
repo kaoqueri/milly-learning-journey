@@ -1,2 +1,6 @@
-# My C++ Revision
-This is a repository to keep track of my c++ code revision. The purpose of this is to do something bigger soon! 🤖
+# The archive of my learning journey
+
+> Milly is a person who likes to keep recordings on what she have learnt.
+
+## Base Code
+- [c++]()
