@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangular Prism Calculator & 3D Plotter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom red theme styles */
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #2a0000;
+        }
+        .container {
+            background-color: #4d0000;
+            border: 1px solid #ff4d4d;
+        }
+        .btn-red {
+            background-color: #e53e3e;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-red:hover {
+            background-color: #c53030;
+            transform: translateY(-2px);
+        }
+        .input-red {
+            background-color: #7f1d1d;
+            border-color: #ff4d4d;
+            color: #fee2e2;
+        }
+        .input-red::placeholder {
+            color: #fca5a5;
+        }
+        .input-red:focus {
+            outline: none;
+            border-color: #4ade80; /* Green focus border */
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.5); /* Green focus shadow */
+        }
+        #plot-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .error-message {
+            background-color: #fed7d7;
+            border-left: 4px solid #e53e3e;
+            color: #c53030;
+        }
+    </style>
+    <!-- Link to Orbitron font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Three.js library for 3D rendering -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+</head>
+<body class="text-red-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="container w-full max-w-4xl mx-auto p-6 md:p-8 rounded-2xl shadow-2xl shadow-red-900/50">
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-green-300 mb-6">Triangular Prism Calculator</h1>
+        <p class="text-center text-red-200 mb-8">Enter the dimensions of the triangular base and the prism's height to calculate its properties and visualize it in 3D.</p>
+
+        <!-- Input Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div>
+                <div class="mb-6 p-4 bg-red-900/50 rounded-lg border border-red-700">
+                    <h3 class="font-semibold text-lg text-red-300 mb-2 text-center">Dimension Reference</h3>
+                    <svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto max-w-xs mx-auto">
+                        <defs>
+                            <style>
+                                .prism-line { stroke: #ff7b7b; stroke-width: 1.5; }
+                                .prism-face { fill: rgba(239, 68, 68, 0.15); }
+                                .label-text { fill: #86efac; font-family: Orbitron, sans-serif; font-size: 10px; font-weight: 500; text-anchor: middle; }
+                                .guide-line { stroke: #fca5a5; stroke-width: 1; stroke-dasharray: 2,2; }
+                            </style>
+                        </defs>
+        
+                        <!-- Back Triangle -->
+                        <path d="M 30 110 L 130 110 L 80 40 Z" class="prism-line prism-face" />
+        
+                        <!-- Connecting Edges -->
+                        <line x1="30" y1="110" x2="60" y2="100" class="prism-line" />
+                        <line x1="130" y1="110" x2="160" y2="100" class="prism-line" />
+                        <line x1="80" y1="40" x2="110" y2="30" class="prism-line" />
+        
+                        <!-- Front Triangle -->
+                        <path d="M 60 100 L 160 100 L 110 30 Z" class="prism-line prism-face" />
+        
+                        <!-- Labels -->
+                        <!-- Side a -->
+                        <text x="140" y="70" class="label-text">a</text>
+                        <!-- Side b -->
+                        <text x="80" y="70" class="label-text">b</text>
+                        <!-- Side c -->
+                        <text x="110" y="110" class="label-text">c</text>
+                        
+                        <!-- Height Label -->
+                        <line x1="130" y1="110" x2="145" y2="118" class="guide-line" />
+                        <line x1="160" y1="100" x2="145" y2="118" class="guide-line" />
+                        <text x="155" y="122" class="label-text">Height</text>
+                    </svg>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="sideA" class="block mb-2 font-medium text-red-200">Base Side 'a'</label>
+                        <input type="number" id="sideA" placeholder="e.g., 3" class="input-red w-full p-3 rounded-lg">
+                    </div>
+                    <div>
+                        <label for="sideB" class="block mb-2 font-medium text-red-200">Base Side 'b'</label>
+                        <input type="number" id="sideB" placeholder="e.g., 4" class="input-red w-full p-3 rounded-lg">
+                    </div>
+                    <div>
+                        <label for="sideC" class="block mb-2 font-medium text-red-200">Base Side 'c'</label>
+                        <input type="number" id="sideC" placeholder="e.g., 5" class="input-red w-full p-3 rounded-lg">
+                    </div>
+                    <div>
+                        <label for="height" class="block mb-2 font-medium text-red-200">Prism Height</label>
+                        <input type="number" id="height" placeholder="e.g., 10" class="input-red w-full p-3 rounded-lg">
+                    </div>
+                </div>
+                 <button id="calculateBtn" class="btn-red w-full text-white font-bold py-3 px-4 rounded-lg shadow-lg">Calculate & Plot</button>
+                 <div id="error-container" class="mt-4"></div>
+            </div>
+
+            <!-- Output and Plot Section -->
+            <div class="space-y-4">
+                 <!-- Calculation Output -->
+                <div id="output" class="bg-red-900/50 p-4 rounded-lg border border-red-700 min-h-[100px]">
+                    <h3 class="font-semibold text-lg text-red-300 border-b border-red-700 pb-2 mb-2">Results</h3>
+                    <p class="text-red-200">Calculations will appear here.</p>
+                </div>
+                 <!-- 3D Plot -->
+                <div id="plot-container" class="w-full h-64 md:h-80 bg-white rounded-lg border border-red-700 relative overflow-hidden">
+                    <div id="placeholder" class="absolute inset-0 flex items-center justify-center text-gray-500">
+                        <p>3D plot will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- DOM Elements ---
+        const calculateBtn = document.getElementById('calculateBtn');
+        const outputDiv = document.getElementById('output');
+        const plotContainer = document.getElementById('plot-container');
+        const errorContainer = document.getElementById('error-container');
+        const placeholder = document.getElementById('placeholder');
+        
+        const sideAInput = document.getElementById('sideA');
+        const sideBInput = document.getElementById('sideB');
+        const sideCInput = document.getElementById('sideC');
+        const heightInput = document.getElementById('height');
+
+        // --- 3D Scene variables ---
+        let scene, camera, renderer, controls, prismMesh;
+
+        // --- Initializer for the 3D scene ---
+        function initScene() {
+            if (renderer) return; // Prevent re-initialization
+
+            scene = new THREE.Scene();
+            
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, plotContainer.clientWidth / plotContainer.clientHeight, 0.1, 1000);
+            camera.position.z = 15;
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor(0xffffff, 1); // Set background to white
+            renderer.setSize(plotContainer.clientWidth, plotContainer.clientHeight);
+            plotContainer.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xddffdd, 0.5); // Subtle green light for secondary color
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            // Controls for user interaction
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                if (prismMesh) {
+                    prismMesh.rotation.y += 0.005; // Gentle rotation
+                }
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                const width = plotContainer.clientWidth;
+                const height = plotContainer.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+        }
+        
+        function showError(message) {
+            errorContainer.innerHTML = `<div class="error-message p-4 rounded-md">${message}</div>`;
+        }
+
+        function clearError() {
+            errorContainer.innerHTML = '';
+        }
+
+        // --- Main Calculation and Plotting Function ---
+        function calculateAndPlot() {
+            clearError();
+            const a = parseFloat(sideAInput.value);
+            const b = parseFloat(sideBInput.value);
+            const c = parseFloat(sideCInput.value);
+            const height = parseFloat(heightInput.value);
+
+            // --- Input Validation ---
+            if (isNaN(a) || isNaN(b) || isNaN(c) || isNaN(height)) {
+                showError('Please enter valid numbers in all fields.');
+                return;
+            }
+            if (a <= 0 || b <= 0 || c <= 0 || height <= 0) {
+                showError('All dimensions must be positive numbers.');
+                return;
+            }
+            // Triangle Inequality Theorem
+            if (a + b <= c || a + c <= b || b + c <= a) {
+                showError('The provided side lengths cannot form a triangle.');
+                return;
+            }
+            
+            // --- Calculations ---
+            // Heron's formula for the area of the triangular base
+            const s = (a + b + c) / 2;
+            const baseArea = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            const volume = baseArea * height;
+            const lateralArea = (a + b + c) * height;
+            const surfaceArea = 2 * baseArea + lateralArea;
+
+            // --- Display Results ---
+            outputDiv.innerHTML = `
+                <h3 class="font-semibold text-lg text-red-300 border-b border-red-700 pb-2 mb-2">Results</h3>
+                <p class="text-red-200 mb-1"><strong class="font-medium text-red-100">Volume:</strong> <span class="font-bold text-green-400">${volume.toFixed(2)}</span> units³</p>
+                <p class="text-red-200 mb-1"><strong class="font-medium text-red-100">Surface Area:</strong> <span class="font-bold text-green-400">${surfaceArea.toFixed(2)}</span> units²</p>
+                <p class="text-red-200"><strong class="font-medium text-red-100">Base Area:</strong> <span class="font-bold text-green-400">${baseArea.toFixed(2)}</span> units²</p>
+            `;
+            
+            // --- Plotting ---
+            if (!renderer) initScene();
+            placeholder.style.display = 'none';
+
+            // Remove previous prism if it exists
+            if (prismMesh) {
+                scene.remove(prismMesh);
+                prismMesh.geometry.dispose();
+                prismMesh.material.dispose();
+            }
+
+            // Calculate vertex coordinates for the triangular base
+            const x_v2 = c;
+            const y_v2 = 0;
+            // Using law of cosines to find the third vertex
+            const x_v3 = (c * c + b * b - a * a) / (2 * c);
+            const y_v3 = Math.sqrt(b * b - x_v3 * x_v3);
+
+            // Create the 2D shape of the triangle
+            const triangleShape = new THREE.Shape();
+            triangleShape.moveTo(0, 0);
+            triangleShape.lineTo(x_v2, y_v2);
+            triangleShape.lineTo(x_v3, y_v3);
+            triangleShape.lineTo(0, 0);
+
+            // Extrude the shape to create the prism
+            const extrudeSettings = {
+                depth: height,
+                bevelEnabled: false
+            };
+            const geometry = new THREE.ExtrudeGeometry(triangleShape, extrudeSettings);
+            
+            // Center the geometry
+            geometry.center();
+            
+            const material = new THREE.MeshStandardMaterial({ 
+                color: 0xe53e3e, 
+                roughness: 0.6,
+                metalness: 0.2
+            });
+            prismMesh = new THREE.Mesh(geometry, material);
+            scene.add(prismMesh);
+        }
+
+        calculateBtn.addEventListener('click', calculateAndPlot);
+    </script>
+</body>
+</html>
+

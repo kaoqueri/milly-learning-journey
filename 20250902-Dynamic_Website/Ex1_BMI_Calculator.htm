@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('farm.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Makes the background stay in place on scroll */
+        }
+        /* Style for the recommendation lists */
+        #result ul {
+            text-align: left;
+            margin-top: 1rem;
+            list-style-position: inside;
+        }
+        #result li {
+            margin-bottom: 0.5rem;
+        }
+        #result h3 {
+            font-weight: 600;
+            margin-top: 1rem;
+            color: #374151; /* gray-700 */
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen py-12">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">🧍🏻‍♀️BMI Calculator🧍🏻‍♂️</h1>
+
+        <!-- Weight Input -->
+        <div class="mb-4">
+            <label for="weight" class="block text-gray-700 text-sm font-medium mb-2">Weight (kg)</label>
+            <input type="number" id="weight" name="weight" placeholder="Enter your weight in kilograms" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Height Input -->
+        <div class="mb-6">
+            <label for="height" class="block text-gray-700 text-sm font-medium mb-2">Height (m)</label>
+            <input type="number" id="height" name="height" placeholder="Enter your height in meters" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Calculate Button -->
+        <button id="calculateBtn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+            Calculate BMI
+        </button>
+
+        <!-- Result Display -->
+        <div id="result" class="mt-6 text-center text-base text-gray-800"></div>
+    </div>
+
+    <script>
+        const weightInput = document.getElementById('weight');
+        const heightInput = document.getElementById('height');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultDiv = document.getElementById('result');
+
+        calculateBtn.addEventListener('click', () => {
+            const weight = parseFloat(weightInput.value);
+            const height = parseFloat(heightInput.value);
+
+            // Clear previous result and styling
+            resultDiv.innerHTML = '';
+            resultDiv.className = 'mt-6 text-center text-base text-gray-800';
+
+            // Input validation
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                resultDiv.textContent = 'Please enter valid positive numbers for weight and height.';
+                resultDiv.classList.add('text-red-500', 'font-semibold');
+                return;
+            }
+
+            // BMI Calculation
+            const bmi = weight / (height * height);
+            const bmiFormatted = bmi.toFixed(2);
+            let resultHTML = `Your BMI is: <span class="font-bold text-blue-600 text-lg">${bmiFormatted}</span><br>`;
+
+            // Provide recommendations based on BMI
+            if (bmi > 25) {
+                resultHTML += `
+                    <div class="mt-4 p-4 bg-orange-100 border-l-4 border-orange-500 text-orange-700 rounded-r-lg">
+                        <h3 class="font-bold text-lg">Recommendation: Exercise Plan 🎽</h3>
+                        <p class="text-sm text-left mt-2">A BMI over 25 suggests you are in the overweight range. Consider incorporating more physical activity. Here’s a sample plan:</p>
+                        <ul class="list-disc text-sm text-left pl-5 mt-2">
+                            <li><strong>Cardio:</strong> 3-5 times a week (e.g., 30 mins of brisk walking, cycling, or swimming).</li>
+                            <li><strong>Strength Training:</strong> 2-3 times a week (e.g., squats, push-ups, lunges).</li>
+                            <li><strong>Flexibility:</strong> Stretch daily to improve mobility.</li>
+                        </ul>
+                        <p class="text-xs text-left mt-3 italic">Always consult a healthcare professional before starting a new exercise regimen.</p>
+                    </div>`;
+            } else if (bmi < 15) {
+                 resultHTML += `
+                    <div class="mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-r-lg">
+                        <h3 class="font-bold text-lg">Recommendation: Food Plan 🥗</h3>
+                        <p class="text-sm text-left mt-2">A BMI under 15 suggests you are in the underweight range. Focus on a balanced diet. Here’s a sample plan:</p>
+                        <ul class="list-disc text-sm text-left pl-5 mt-2">
+                            <li><strong>Nutrient-Dense Foods:</strong> Focus on healthy fats (avocado, nuts), lean proteins (chicken, beans), and complex carbs (oats, brown rice).</li>
+                            <li><strong>Eat Frequently:</strong> Aim for 5-6 smaller, balanced meals throughout the day.</li>
+                            <li><strong>Healthy Snacks:</strong> Include snacks like yogurt, fruit, or nuts between meals.</li>
+                        </ul>
+                         <p class="text-xs text-left mt-3 italic">Please consult with a doctor or registered dietitian for personalized advice.</p>
+                    </div>`;
+            } else {
+                 resultHTML += `<p class="mt-2 text-green-600 font-medium">This is within the healthy range. Keep up the great work!</p>`;
+            }
+
+            // Display the result
+            resultDiv.innerHTML = resultHTML;
+        });
+    </script>
+</body>
+</html>
+

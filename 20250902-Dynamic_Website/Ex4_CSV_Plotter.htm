@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Data Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-sky-50 text-gray-800 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+        
+        <header class="text-center">
+            <h1 class="text-3xl font-bold text-sky-800">CSV Data Visualizer</h1>
+            <p class="text-gray-500 mt-2">Choose a CSV file with your data points to see a cute graph!</p>
+        </header>
+
+        <!-- File Input -->
+        <div class="flex flex-col items-center p-6 border-2 border-dashed border-sky-300 rounded-xl bg-sky-100">
+            <label for="csvFile" class="cursor-pointer bg-sky-500 text-white font-semibold py-2 px-5 rounded-lg hover:bg-sky-600 transition-transform transform hover:scale-105 duration-300 shadow-md">
+                Choose a CSV File
+            </label>
+            <input type="file" id="csvFile" class="hidden" accept=".csv">
+            <span id="fileName" class="mt-3 text-sm text-gray-500">No file selected</span>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div id="output" class="hidden grid md:grid-cols-2 gap-8 items-start">
+            
+            <!-- Graph and Controls -->
+            <div class="flex flex-col items-center space-y-4">
+                <h2 class="text-xl font-semibold">Data Graph</h2>
+                <canvas id="myChart" width="300" height="200" class="border border-gray-300 rounded-md bg-white"></canvas>
+                <div class="text-center">
+                    <button id="trendlineBtn" class="bg-sky-200 text-sky-800 font-medium py-2 px-5 rounded-md hover:bg-sky-300 transition duration-300">
+                        Show Trend Line
+                    </button>
+                    <p id="equation" class="mt-2 text-sm text-sky-700 font-mono h-5"></p>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="max-h-96 overflow-y-auto">
+                 <h2 class="text-xl font-semibold text-center mb-4">Data Points</h2>
+                <div id="csvTable" class="border border-gray-200 rounded-lg shadow-sm"></div>
+            </div>
+
+        </div>
+         <!-- Error Message -->
+        <div id="error-message" class="hidden text-center bg-pink-100 text-pink-700 p-3 rounded-md"></div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const csvFileInput = document.getElementById('csvFile');
+        const fileNameDisplay = document.getElementById('fileName');
+        const outputContainer = document.getElementById('output');
+        const tableContainer = document.getElementById('csvTable');
+        const trendlineBtn = document.getElementById('trendlineBtn');
+        const equationDisplay = document.getElementById('equation');
+        const errorMessageDiv = document.getElementById('error-message');
+        
+        const canvas = document.getElementById('myChart');
+        const ctx = canvas.getContext('2d');
+
+        // State
+        let dataPoints = [];
+        let trendlineVisible = false;
+        let trendlineParams = null;
+
+        // Event Listener for file input
+        csvFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            fileNameDisplay.textContent = file.name;
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const text = e.target.result;
+                resetState();
+                try {
+                    parseCSV(text);
+                    if (dataPoints.length > 0) {
+                        displayData();
+                        calculateTrendline();
+                        drawGraph();
+                        outputContainer.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    showError(error.message);
+                }
+            };
+            
+            reader.onerror = function() {
+                showError("Error reading the file.");
+            };
+
+            reader.readAsText(file);
+        });
+
+        // Event Listener for trend line button
+        trendlineBtn.addEventListener('click', () => {
+            trendlineVisible = !trendlineVisible;
+            drawGraph();
+            updateTrendlineUI();
+        });
+        
+        function resetState() {
+            dataPoints = [];
+            trendlineVisible = false;
+            trendlineParams = null;
+            outputContainer.classList.add('hidden');
+            errorMessageDiv.classList.add('hidden');
+            tableContainer.innerHTML = '';
+            equationDisplay.textContent = '';
+            trendlineBtn.textContent = 'Show Trend Line';
+        }
+        
+        function showError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.remove('hidden');
+            outputContainer.classList.add('hidden');
+        }
+
+        // --- CSV Parsing ---
+        function parseCSV(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            if (lines.length === 0) {
+                 throw new Error("CSV file is empty.");
+            }
+            
+            lines.forEach((line, index) => {
+                const values = line.split(',');
+                // Skip header or malformed lines
+                if (values.length !== 2) {
+                    console.warn(`Skipping line ${index + 1}: Expected 2 values, found ${values.length}. Line: "${line}"`);
+                    return;
+                }
+                
+                const x = parseFloat(values[0]);
+                const y = parseFloat(values[1]);
+                
+                if (!isNaN(x) && !isNaN(y)) {
+                    dataPoints.push({ x, y });
+                } else {
+                     console.warn(`Skipping line ${index + 1} due to non-numeric data. Line: "${line}"`);
+                }
+            });
+
+            if(dataPoints.length === 0) {
+                throw new Error("No valid numeric data points found in the CSV file. Ensure it has two columns of numbers.");
+            }
+        }
+
+        // --- Data Display ---
+        function displayData() {
+            let tableHTML = '<table class="w-full text-sm text-left text-gray-500">';
+            tableHTML += `
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">X Value</th>
+                        <th scope="col" class="px-6 py-3">Y Value</th>
+                    </tr>
+                </thead><tbody>`;
+
+            dataPoints.forEach(point => {
+                tableHTML += `
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">${point.x}</td>
+                        <td class="px-6 py-4">${point.y}</td>
+                    </tr>`;
+            });
+            tableHTML += '</tbody></table>';
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        // --- Linear Regression Calculation ---
+        function calculateTrendline() {
+            if (dataPoints.length < 2) {
+                trendlineParams = null;
+                return;
+            }
+
+            const n = dataPoints.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+            for (const point of dataPoints) {
+                sumX += point.x;
+                sumY += point.y;
+                sumXY += point.x * point.y;
+                sumXX += point.x * point.x;
+            }
+
+            const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            trendlineParams = { slope, intercept };
+        }
+
+        // --- Graph Drawing ---
+        function drawGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (dataPoints.length === 0) return;
+
+            // Find data bounds
+            const xMin = Math.min(...dataPoints.map(p => p.x));
+            const xMax = Math.max(...dataPoints.map(p => p.x));
+            const yMin = Math.min(...dataPoints.map(p => p.y));
+            const yMax = Math.max(...dataPoints.map(p => p.y));
+            
+            // Add padding to bounds
+            const xRange = xMax - xMin || 1;
+            const yRange = yMax - yMin || 1;
+            const padding = 20;
+
+            const scaleX = (canvas.width - 2 * padding) / xRange;
+            const scaleY = (canvas.height - 2 * padding) / yRange;
+
+            // Function to transform data coords to canvas coords
+            const getCanvasX = (x) => padding + (x - xMin) * scaleX;
+            const getCanvasY = (y) => canvas.height - padding - (y - yMin) * scaleY;
+
+            // Draw data points
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.7)'; // Baby Blue color
+            dataPoints.forEach(point => {
+                ctx.beginPath();
+                ctx.arc(getCanvasX(point.x), getCanvasY(point.y), 4, 0, 2 * Math.PI); // Made points slightly bigger
+                ctx.fill();
+            });
+
+            // Draw trend line if visible and calculated
+            if (trendlineVisible && trendlineParams) {
+                const { slope, intercept } = trendlineParams;
+
+                const x1 = xMin;
+                const y1 = slope * x1 + intercept;
+                const x2 = xMax;
+                const y2 = slope * x2 + intercept;
+
+                ctx.strokeStyle = 'rgba(220, 38, 38, 0.8)'; // Red color
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(getCanvasX(x1), getCanvasY(y1));
+                ctx.lineTo(getCanvasX(x2), getCanvasY(y2));
+                ctx.stroke();
+            }
+        }
+        
+        function updateTrendlineUI() {
+             if (trendlineVisible && trendlineParams) {
+                trendlineBtn.textContent = 'Hide Trend Line';
+                const { slope, intercept } = trendlineParams;
+                equationDisplay.textContent = `y = ${slope.toFixed(3)}x + ${intercept.toFixed(3)}`;
+            } else {
+                trendlineBtn.textContent = 'Show Trend Line';
+                equationDisplay.textContent = '';
+            }
+        }
+    </script>
+</body>
+</html>
+
