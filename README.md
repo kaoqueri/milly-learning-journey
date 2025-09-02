@@ -3,4 +3,4 @@
 > Milly is a person who likes to keep recordings on what she have learnt.
 
 ## Base Code
-- [c++]()
+- [c++](https://github.com/kaoqueri/Milly-Learning_Journey/tree/main/cpp_Revision)
