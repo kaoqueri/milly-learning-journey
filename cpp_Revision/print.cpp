@@ -1,10 +1,12 @@
-// -- Printing to the Console --
+/* 
+    Printing to the Console 
+*/
 
-// Necessary header files for input output functions
+// -- Header Files --
 #include <iostream>
 using namespace std;
 
-// Main Function
+// -- Main Function --
 int main() {
   
     cout << "Hello World!" << endl; // New line
