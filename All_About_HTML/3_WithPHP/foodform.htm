@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purr-fect Pizza Palace</title>
+    <style>
+        /* [Your existing CSS goes here...] */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fdf6f7;
+            color: #4a4a4a;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 150px; /* Add padding to prevent overlap with summary box */
+        }
+        .container { max-width: 900px; margin: auto; }
+        form { background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 8px 30px rgba(212, 175, 155, 0.3); }
+        h1 { font-family: 'Pacifico', cursive; color: #e57373; text-align: center; font-size: 2.8em; margin-top: 0; margin-bottom: 20px; }
+        h2 { font-weight: 600; color: #a1887f; border-bottom: 2px solid #fce4ec; padding-bottom: 10px; margin-top: 40px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; }
+        .menu-item { border: 1px solid #fce4ec; border-radius: 15px; padding: 15px; text-align: center; transition: box-shadow 0.3s, border-color 0.3s; }
+        .menu-item:hover { box-shadow: 0 4px 15px rgba(212, 175, 155, 0.2); }
+        .item-image { width: 100%; height: 140px; border-radius: 10px; object-fit: cover; margin-bottom: 15px; }
+        .menu-item h3 { margin: 0 0 5px 0; font-size: 1.1em; color: #5d4037; }
+        .price { font-size: 1.2em; font-weight: 600; color: #e57373; margin: 0 0 15px 0; }
+        .amount-control label { font-size: 0.9em; margin-right: 10px; }
+        .amount-control input[type="number"] { width: 60px; padding: 5px 10px; border-radius: 8px; border: 1px solid #ddd; text-align: center; font-family: 'Poppins', sans-serif; font-size: 1em; }
+        input[type="submit"] { width: 100%; background-color: #e57373; color: white; padding: 15px; border: none; border-radius: 10px; font-size: 1.2em; font-weight: 600; cursor: pointer; transition: background-color 0.3s, opacity 0.3s; margin-top: 40px; }
+        input[type="submit"]:hover { background-color: #d32f2f; }
+        input[type="submit"]:disabled { background-color: #cccccc; cursor: not-allowed; opacity: 0.7; }
+        .item-selected { border-color: #e57373; box-shadow: 0 4px 15px rgba(229, 115, 115, 0.3); }
+
+        /* --- New styles for the summary box --- */
+        .order-summary {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 15px 25px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            border-top: 3px solid #e57373;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .order-summary span {
+            color: #e57373;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form name="foodform" action="foodprocess.php" method="post">
+            <h1>The Purr-fect Pizza Palace</h1>
+            
+            <h2>1. Feline Favorite Pizzas 🍕</h2>
+            <div class="menu-grid">
+                <div class="menu-item" data-name="Mee-ow Margarita" data-price="12.00">
+                    <img src="mee-ow_margarita.png" alt="Mee-ow Margarita Pizza" class="item-image">
+                    <h3>Mee-ow Margarita</h3>
+                    <p class="price">$12.00</p>
+                    <div class="amount-control">
+                        <label for="pizza_margarita">Amount:</label>
+                        <input type="number" id="pizza_margarita" name="pizza_margarita" min="0" value="0">
+                    </div>
+                </div>
+                <div class="menu-item" data-name="Paw-ma Ham & Cheese" data-price="14.00">
+                    <img src="paw-ma_ham_cheese.png" alt="Paw-ma Ham and Cheese Pizza" class="item-image">
+                    <h3>Paw-ma Ham & Cheese</h3>
+                    <p class="price">$14.00</p>
+                    <div class="amount-control">
+                        <label for="pizza_parma_ham">Amount:</label>
+                        <input type="number" id="pizza_parma_ham" name="pizza_parma_ham" min="0" value="0">
+                    </div>
+                </div>
+                <div class="menu-item" data-name="Hiss-waiian Tropical" data-price="13.50">
+                    <img src="hiss-waiian_tropical.png" alt="Hiss-waiian Tropical Pizza" class="item-image">
+                    <h3>Hiss-waiian Tropical</h3>
+                    <p class="price">$13.50</p>
+                    <div class="amount-control">
+                        <label for="pizza_hawaiian">Amount:</label>
+                        <input type="number" id="pizza_hawaiian" name="pizza_hawaiian" min="0" value="0">
+                    </div>
+                </div>
+                 <div class="menu-item" data-name="Four-Paw Cheese Delight" data-price="13.00">
+                    <img src="four-paw_cheese_delight.png" alt="Four-Paw Cheese Delight Pizza" class="item-image">
+                    <h3>Four-Paw Cheese Delight</h3>
+                    <p class="price">$13.00</p>
+                    <div class="amount-control">
+                        <label for="pizza_four_cheese">Amount:</label>
+                        <input type="number" id="pizza_four_cheese" name="pizza_four_cheese" min="0" value="0">
+                    </div>
+                </div>
+                <div class="menu-item" data-name="Purr-peroni Feast" data-price="14.00">
+                    <img src="purr-peroni_feast.png" alt="Purr-peroni Feast Pizza" class="item-image">
+                    <h3>Purr-peroni Feast</h3>
+                    <p class="price">$14.00</p>
+                    <div class="amount-control">
+                        <label for="pizza_pepperoni">Amount:</label>
+                        <input type="number" id="pizza_pepperoni" name="pizza_pepperoni" min="0" value="0">
+                    </div>
+                </div>
+            </div>
+            
+            <h2>2. Creamy Catnip Delights 🍰</h2>
+            <div class="menu-grid">
+                <div class="menu-item" data-name="Red Jelly with Cream" data-price="4.00">
+                    <h3>Red Jelly with Cream</h3>
+                    <p class="price">$4.00</p>
+                    <div class="amount-control">
+                        <label for="jelly_amount">Amount:</label>
+                        <input type="number" id="jelly_amount" name="jelly_amount" min="0" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <h2>3. Whiskered Wonders 🥤</h2>
+            <div class="menu-grid">
+                <div class="menu-item" data-name="Kitty Milk" data-price="2.50">
+                    <h3>Kitty Milk</h3>
+                    <p class="price">$2.50</p>
+                    <div class="amount-control">
+                        <label for="drink_milk">Amount:</label>
+                        <input type="number" id="drink_milk" name="drink_milk" min="0" value="0">
+                    </div>
+                </div>
+                <div class="menu-item" data-name="Salmon Splash Soda" data-price="3.00">
+                    <h3>Salmon Splash Soda</h3>
+                    <p class="price">$3.00</p>
+                    <div class="amount-control">
+                        <label for="drink_soda">Amount:</label>
+                        <input type="number" id="drink_soda" name="drink_soda" min="0" value="0">
+                    </div>
+                </div>
+                <div class="menu-item" data-name="Tuna Tonic Iced Tea" data-price="3.00">
+                    <h3>Tuna Tonic Iced Tea</h3>
+                    <p class="price">$3.00</p>
+                    <div class="amount-control">
+                        <label for="drink_tea">Amount:</label>
+                        <input type="number" id="drink_tea" name="drink_tea" min="0" value="0">
+                    </div>
+                </div>
+                <div class="menu-item" data-name="Furball Fizz Water" data-price="2.00">
+                    <h3>Furball Fizz Water</h3>
+                    <p class="price">$2.00</p>
+                    <div class="amount-control">
+                        <label for="drink_fizz">Amount:</label>
+                        <input type="number" id="drink_fizz" name="drink_fizz" min="0" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Place Your Order" id="submit-button">
+        </form>
+    </div>
+
+    <div class="order-summary" id="order-summary" aria-live="polite">
+        Your total: <span id="total-price">$0.00</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const allAmountInputs = document.querySelectorAll('.amount-control input[type="number"]');
+            const totalPriceEl = document.getElementById('total-price');
+            const submitButton = document.getElementById('submit-button');
+
+            function updateOrder() {
+                let subtotal = 0;
+
+                allAmountInputs.forEach(input => {
+                    const quantity = parseInt(input.value, 10);
+                    const menuItem = input.closest('.menu-item');
+                    
+                    if (quantity > 0) {
+                        const price = parseFloat(menuItem.dataset.price);
+                        subtotal += quantity * price;
+                        menuItem.classList.add('item-selected'); // Highlight selected items
+                    } else {
+                        menuItem.classList.remove('item-selected');
+                    }
+                });
+
+                // Update the total price display
+                totalPriceEl.textContent = `$${subtotal.toFixed(2)}`;
+
+                // Disable submit button if the order is empty
+                submitButton.disabled = subtotal === 0;
+            }
+
+            // Listen for changes on any number input
+            allAmountInputs.forEach(input => {
+                input.addEventListener('input', updateOrder);
+            });
+
+            // Initial call to set the button state
+            updateOrder();
+        });
+    </script>
+</body>
+</html>
