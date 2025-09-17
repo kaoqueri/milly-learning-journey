@@ -1,4 +1,4 @@
-# Milly's Learning Journey 🚀
+# Milly's Learning Journey
 
 Welcome to my digital archive! I'm Milly, and this is where I document my adventures in coding and technology. It's a collection of my notes, projects, and discoveries.
 
